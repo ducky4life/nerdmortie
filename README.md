@@ -49,6 +49,8 @@ docker build -t nerdmortie:latest -f Dockerfile .
 docker run --name nerdmortie nerdmortie:latest
 ```
 
+note that you might have to replace the first line with `FROM python:3.11-slim` for your archetecture
+
 ## todo
 
 - [ ] renaming files and editing metadata for audio files
