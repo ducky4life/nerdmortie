@@ -1,0 +1,7 @@
+pyflakes
+discord.py[voice]
+mutagen
+music_tag
+pynacl
+python-dotenv
+yt_dlp
