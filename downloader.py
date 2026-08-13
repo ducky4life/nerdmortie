@@ -5,11 +5,14 @@ async def download(url, audio=False, path="local"):
         ydl_opts = {
             'outtmpl': f'{path}/'+'%(title)s.%(ext)s',
             'format': 'bestaudio/best',
+            'writesubtitles': 'true',
+            'writethumbnail': 'true',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
             }, {
                 'key': 'EmbedThumbnail',
+                'already_have_thumbnail': False,
             }, {
                 'key': 'FFmpegMetadata',
                 'add_metadata': True,

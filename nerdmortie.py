@@ -14,7 +14,7 @@ load_dotenv()
 
 bot_prefix = "nerd"
 token = os.getenv("NERD_TOKEN")
-download_path = "playlists"
+download_path = "local"
 video_path = "videos"
 
 client = commands.Bot(
@@ -34,6 +34,10 @@ async def on_ready():
 
 def canonicalize_path(filename: str):
     return filename.replace(".webm", ".mp3").replace("\\", "/")
+
+def get_metadata(file: str, metadata_name: str):
+    f = music_tag.load_file(file)
+    return str(f[metadata_name])
 
 async def search_songs(filter:str="title", query:str="None"):
     all_songs = []
@@ -58,7 +62,7 @@ async def search_songs(filter:str="title", query:str="None"):
 
     song_dicts = []
     for song in all_songs:
-        file_path = f"playlists/{song}"
+        file_path = f"{download_path}/{song}"
         try:
             tags = music_tag.load_file(file_path)
         except Exception as e:
@@ -143,6 +147,47 @@ async def get_local_file(ctx, filename=None):
     file = discord.File(download_path + songs[0])
 
     await ctx.send("ok", file=file)
+
+@client.hybrid_command()
+async def get_song_metadata(ctx, filename=None, metadata_name=None):
+
+    songs = await search_songs("title", filename)
+    metadata = get_metadata(download_path + songs[0], metadata_name)
+
+    if metadata == "":
+        metadata = "empty output"
+
+    await send_codeblock(ctx, metadata)
+
+@client.hybrid_command()
+async def get_metadata_list(ctx):
+
+    metadata = """
+album
+albumartist
+artist
+artwork
+comment
+compilation
+composer
+discnumber
+genre
+lyrics
+totaldiscs
+totaltracks
+tracknumber
+tracktitle
+year
+isrc
+#bitrate (read only)
+#codec (read only)
+#length (read only)
+#channels (read only)
+#bitspersample (read only)
+#samplerate (read only)
+"""
+
+    await send_codeblock(ctx, metadata)
 
 @client.hybrid_command()
 @app_commands.choices(filter=[
