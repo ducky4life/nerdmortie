@@ -29,6 +29,7 @@ make sure you have [python](https://www.python.org/downloads/) installed.
    ```
    pip install -r requirements.txt
    ```
+   note that to use the download from spotify/query feature, please remove `proxies=self.proxy` from line 29 in `youtubesearchpython/core/requests.py`
 4. create .env file
    ```
    touch .env

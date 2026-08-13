@@ -1,4 +1,5 @@
 import yt_dlp
+from youtubesearchpython.__future__ import VideosSearch
 
 async def download(url, audio=False, path="local"):
     if audio:
@@ -36,3 +37,8 @@ async def download(url, audio=False, path="local"):
         info = ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(info)
         return filename
+
+async def search_youtube(content: str):
+    videosSearch = VideosSearch(content, limit = 1)
+    videosResult = await videosSearch.next()
+    return videosResult['result'][0]['link']

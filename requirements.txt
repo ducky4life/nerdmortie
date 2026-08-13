@@ -5,3 +5,5 @@ music_tag
 pynacl
 python-dotenv
 yt_dlp
+youtube-search-python
+spotifyscraper

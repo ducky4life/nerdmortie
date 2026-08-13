@@ -6,6 +6,8 @@ import os
 import music_tag
 from dotenv import load_dotenv
 from downloader import download
+from downloader import search_youtube
+from spotify_scraper import SpotifyClient
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -112,17 +114,20 @@ async def send_codeblock(ctx, msg, *, view=None):
     else:
         await ctx.send(f"```{msg}```", view=view)
 
+async def download_from_youtube(url=None, *, folder=None):
+    path = download_path
+    if folder != None:
+        path = download_path + "/" + folder
+
+    filename = canonicalize_path(await download(url, audio=True, path=path))
+    return filename
 
 @client.hybrid_command(description="download audio from youtube")
 @app_commands.describe(url="wat link i download", folder="wat folder under local")
 async def download_audio(ctx, url=None, *, folder=None):
     await ctx.defer()
 
-    path = download_path
-    if folder != None:
-        path = download_path + "/" + folder
-
-    filename = canonicalize_path(await download(url, audio=True, path=path))
+    filename = await download_from_youtube(url, folder)
     await ctx.send(f"saved it as `{filename}`", file=discord.File(filename))
 
 @client.hybrid_command(description="download video from youtube")
@@ -158,6 +163,29 @@ async def get_song_metadata(ctx, filename=None, metadata_name=None):
         metadata = "empty output"
 
     await send_codeblock(ctx, metadata)
+
+@client.hybrid_command()
+async def download_from_query(ctx, query=None):
+
+    song_link = await search_youtube(query)
+
+    await ctx.defer()
+    filename = await download_from_youtube(song_link)
+    await ctx.send(f"saved it as `{filename}`", file=discord.File(filename))
+
+@client.hybrid_command()
+async def download_from_spotify(ctx, url=None):
+
+    with SpotifyClient() as client:
+        results = client.get_track(url)
+        track_name = results.name
+        track_artist = results.artists[0].name
+
+        song_link = await search_youtube(track_name + " " + track_artist)
+
+    await ctx.defer()
+    filename = await download_from_youtube(song_link)
+    await ctx.send(f"saved it as `{filename}`", file=discord.File(filename))
 
 @client.hybrid_command()
 async def get_metadata_list(ctx):
