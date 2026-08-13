@@ -8,8 +8,11 @@ features:
 
 - download files in custom subfolders
 - retrieval of songs using metadata/filename
+- downloading songs from youtube/spotify link or search query
 
 if you would like to play the audio files on discord, check out https://github.com/ducky4life/smortie! a download from youtube command is built-in to smortie
+
+host both repositories on the same bot (by copying downloader.py and commands/helper functions to music.py in smortie) to get the most compatibility
 
 alternatively, i also have a web version of this (also with docker support) https://github.com/ducky4life/Ducktube
 
