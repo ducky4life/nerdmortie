@@ -41,6 +41,15 @@ def get_metadata(file: str, metadata_name: str):
     f = music_tag.load_file(file)
     return str(f[metadata_name])
 
+def set_metadata(file: str, metadata_name: str, value: str):
+    f = music_tag.load_file(file)
+    try:
+        f[metadata_name] = value
+        f.save()
+        return "done"
+    except Exception as e:
+        return str(e)
+
 async def search_songs(filter:str="title", query:str="None"):
     all_songs = []
     songs = []
@@ -158,6 +167,17 @@ async def get_song_metadata(ctx, filename=None, metadata_name=None):
 
     songs = await search_songs("title", filename)
     metadata = get_metadata(download_path + songs[0], metadata_name)
+
+    if metadata == "":
+        metadata = "empty output"
+
+    await send_codeblock(ctx, metadata)
+
+@client.hybrid_command()
+async def set_song_metadata(ctx, filename=None, metadata_name=None, metadata_value=None):
+
+    songs = await search_songs("title", filename)
+    metadata = set_metadata(download_path + songs[0], metadata_name, metadata_value)
 
     if metadata == "":
         metadata = "empty output"
