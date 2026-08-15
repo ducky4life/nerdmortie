@@ -270,4 +270,19 @@ async def search(ctx, filter="title", query=None):
     msg = "\n".join(songs)
     await send_codeblock(ctx, msg)
 
+@client.hybrid_command()
+async def rename_song(ctx, filename=None, newname=None):
+
+    songs: list[str] = await search_songs("title", filename)
+    old_file_name = (songs[0].split("/")[-1]).split(".")[0]
+    new_file_path = songs[0].replace(old_file_name, newname)
+
+    try:
+        os.rename(download_path + songs[0], download_path + new_file_path)
+        msg = "ok"
+    except Exception as e:
+        msg = str(e)
+
+    await send_codeblock(ctx, msg)
+
 client.run(token)
