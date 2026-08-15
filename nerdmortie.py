@@ -185,6 +185,25 @@ async def set_song_metadata(ctx, filename=None, metadata_name=None, metadata_val
     await send_codeblock(ctx, metadata)
 
 @client.hybrid_command()
+async def save_local_file(ctx, file: discord.Attachment, *, folder=None):
+    await ctx.defer()
+
+    path = download_path
+    if folder != None:
+        path = download_path + "/" + folder
+
+    await file.save(path)
+    await ctx.send(f"saved as {file.filename}")
+
+@client.hybrid_command()
+async def get_song_file(ctx, filename=None):
+
+    songs = await search_songs("title", filename)
+    file = discord.File(download_path + songs[0])
+
+    await ctx.send("ok", file=file)
+
+@client.hybrid_command()
 async def download_from_query(ctx, query=None):
 
     song_link = await search_youtube(query)

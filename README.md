@@ -8,7 +8,9 @@ features:
 
 - download files in custom subfolders
 - retrieval of songs using metadata/filename
+- setting song metadata
 - downloading songs from youtube/spotify link or search query
+- downloading/uploading songs from local file
 
 if you would like to play the audio files on discord, check out https://github.com/ducky4life/smortie! a download from youtube command is built-in to smortie
 
