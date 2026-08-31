@@ -123,7 +123,7 @@ async def send_codeblock(ctx, msg, *, view=None):
     else:
         await ctx.send(f"```{msg}```", view=view)
 
-async def download_from_youtube(url=None, *, folder=None):
+async def download_from_youtube(url=None, folder=None):
     path = download_path
     if folder != None:
         path = download_path + "/" + folder
@@ -131,7 +131,7 @@ async def download_from_youtube(url=None, *, folder=None):
     filename = canonicalize_path(await download(url, audio=True, path=path))
     return filename
 
-@client.hybrid_command(description="download audio from youtube")
+@client.hybrid_command(description="download audio from youtube", aliases=['dl'])
 @app_commands.describe(url="wat link i download", folder="wat folder under local")
 async def download_audio(ctx, url=None, *, folder=None):
     await ctx.defer()
