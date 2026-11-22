@@ -128,7 +128,7 @@ async def download_from_youtube(url=None, folder=None):
     if folder != None:
         path = download_path + "/" + folder
 
-    filename = canonicalize_path(await download(url, audio=True, path=path))
+    filename = canonicalize_path(await download(url, audio=True, path=path)).replace(".m4a", ".mp3")
     return filename
 
 @client.hybrid_command(description="download audio from youtube", aliases=['dl'])
